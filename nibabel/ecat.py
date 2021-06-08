@@ -36,11 +36,101 @@ one block (512 bytes), and the frame (image) data follows.
 There is very little documentation of the ECAT format, and many of the comments
 in this code come from a combination of trial and error and wild speculation.
 
+There are ~2 formats of ECAT files EACT7 and ECAT6.3 that are widely in use,
+the byte position, header field/variable name, type, and description of each of
+formats are as follows:
+
+
+ECAT7 =
+Byte, Variable, Name, Type, Comment
+0, MAGIC_NUMBER, Character*14,              UNIX file type identification number (NOT PART
+                                            OF THE MATRIX HEADER DATA)
+14, ORIGINAL_FILE_NAME,                     Character*32, Scan file’s creation name
+46, SW_VERSION, Integer*2,                  Software version number
+48, SYSTEM TYPE,Integer*2,                  Scanner model (i.e., 951, 951R, 953, 953B,
+                                            921, 922, 925, 961, 962, 966)
+50, FILE_TYPE,                              Integer*2, Enumerated type (00=unknown, 01=Sinogram, 02=Image-16,
+                                            03=Attenuation Correction, 04=Normalization,
+                                            05=Polar Map, 06=Volume 8, 07=Volume 16,
+                                            08=Projection 8, 09=Projection 16, 10=Image 8,
+                                            11=3D Sinogram 16, 12=3D Sinogram 8,
+                                            13=3D Normalization, 14=3D Sinogram Fit)
+52, SERIAL_NUMBER, Character*10,            The serial number of the gantry
+62, SCAN_START_TIME, Integer*4,             Date and time that acquisition was started (in
+                                            secs from base time)
+66, ISOTOPE_NAME, Character*8,              Isotope
+74, ISOTOPE_HALFLIFE, Real*4,               Half-life of isotope specified (in sec.)
+78, RADIOPHARMACEUTICAL,                    Character*32, Free format ASCII
+110, GANTRY_TILT, Real*4,                   Angle (in degrees)
+114, GANTRY_ROTATION, Real*4,               Angle (in degrees)
+118, BED_ELEVATION, Real*4,                 Bed height (in cm.) from lowest point
+122, INTRINSIC_TILT, Real*4,                Angle (in degrees),Angle that the first detector of Bucket 0 is offset from
+                                            top center (in degrees)
+126, WOBBLE_SPEED, Integer*2,               Revolutions/minute (0 if not wobbled)
+128, TRANSM_SOURCE_TYPE, Integer 2,         Enumerated type (SRC_NONE, _RRING, _RING, _ROD, _RROD)
+130, DISTANCE_SCANNED, Real*4,              Total distance scanned (in cm)
+134, TRANSAXIAL_FOV, Real*4,                Diameter (in cm.) of transaxial view
+138, ANGULAR_COMPRESSION, Integer*2,        Enumerated Type (0=no mash,1=mash of 2, 2=mash of 4)
+140, COIN_SAMP_MODE, Integer*2,             Enumerated type (0=Net Trues, 1=Prompts and Delayed, 3= Prompts, Delayed,
+                                            and Multiples)
+142, AXIAL_SAMP_MODE, Integer*2,            Enumerated type (0=Normal, 1=2X, 2=3X)
+144, ECAT_CALIBRATION_FACTOR, Real*4,       Quantification scale factor (to convert from ECAT counts to activity counts)
+148, CALIBRATION_UNITS, Integer*2,          Enumerated type (0=Uncalibrated, 1=Calibrated,)
+150, CALIBRATION_UNITS_LABEL, Integer*2,    Enumerated type (BLOOD_FLOW, LMRGLU)
+152, COMPRESSION_CODE, Integer*2,           Enumerated type (COMP_NONE, (This is the only value))
+154, STUDY_TYPE, Character*12,              Study descriptor
+166, PATIENT_ID, Character*16,              Patient identification descriptor
+182, PATIENT_NAME, Character*32,            Patient name (free format ASCII)
+214, PATIENT_SEX, Character*1,              Enumerated type (SEX_MALE, _FEMALE, _UNKNOWN)
+215, PATIENT_DEXTERITY, Character*1,        Enumerated type (DEXT_RT, _LF, _UNKNOWN)
+216, PATIENT_AGE, Real*4,                   Patient age (years)
+220, PATIENT_HEIGHT, Real*4,                Patient height (cm)
+224, PATIENT_WEIGHT, Real*4,                Patient weight (kg)
+228, PATIENT_BIRTH_DATE, Integer*4,         Format is YYYYMMDD
+232, PHYSICIAN_NAME, Character*32,          Attending Physician name (free format)
+264, OPERATOR_NAME, Character*32,           Operator name (free format)
+296, STUDY_DESCRIPTION, Character*32,       Free format ASCII
+328, ACQUISITION_TYPE, Integer*2,           Enumerated type (0=Undefined, 1=Blank, 2=Transmission, 3=Static emission,
+                                            4=Dynamic emission, 5=Gated emission, 6=Transmission rectilinear,
+                                            7=Emission rectilinear)
+330, PATIENT_ORIENTATION, Integer*2,        Enumerated Type (Bit 0 clear - Feet first, Bit 0 set - Head first,
+                                            Bit 1-2 00 - Prone, Bit 1-2 01 - Supine, Bit 1-2 10 - Decubitus Right,
+                                            Bit 1-2 11 - Decubitus Left)
+332, FACILITY_NAME, Character*20,           Free format ASCII
+352, NUM_PLANES, Integer*2,                 Number of planes of data collected
+354, NUM_FRAMES, Integer*2,                 Number of frames of data collected OR Highest frame number (in partially
+                                            reconstructed files)
+356, NUM_GATES, Integer*2,                  Number of gates of data collected
+358, NUM_BED_POS, Integer*2,                Number of bed positions of data collected
+360, INIT_BED_POSITION, Real*4,             Absolute location of initial bed position (in cm.)
+364, BED_POSITION(15), Real*4,              Absolute bed location (in cm.)
+424, PLANE_SEPARATION, Real*4,              Physical distance between adjacent planes (in cm.)
+428, LWR_SCTR_THRES, Integer*2,             Lowest threshold setting for scatter (in KeV)
+430, LWR_TRUE_THRES, Integer*2,             Lower threshold setting for trues in (in KeV)
+432, UPR_TRUE_THRES, Integer*2,             Upper threshold setting for trues (in KeV)
+434, USER_PROCESS_CODE, Character*10,       Data processing code (defined by user)
+444, ACQUISITION_MODE, Integer*2,           Enumerated Type (0=Normal, 1=Windowed, 2=Windowed & Nonwindowed,
+                                            3=Dual energy, 4=Upper energy, 5=Emission and Transmission)
+446, BIN_SIZE, Real*4,                      Width of view sample (in cm)
+450, BRANCHING_FRACTION, Real*4,            Fraction of decay by positron emission
+454, DOSE_START_TIME, Integer*4,            Actual time radiopharmaceutical was injected or flow was started (in sec
+                                            since base time)
+458, DOSAGE, Real*4,                        Radiopharmaceutical dosage (in bequerels/cc) at time of injection
+462, WELL_COUNTER_CORR_FACTOR, Real*4, TBD
+466, DATA_UNITS, Character*3.2
+498, SEPTA_STATE, Integer*2,                Septa position during scan (0=septa extended, 1=septa retracted)
+500, FILL(6), Integer*2,                    CTI Reserved space (12 bytes)
+
+
 XMedcon can read and write ECAT 6 format, and read ECAT 7 format: see
 http://xmedcon.sourceforge.net and the ECAT files in the source of XMedCon,
 currently ``libs/tpc/*ecat*`` and ``source/m-ecat*``.  Unfortunately XMedCon is
 GPL and some of the header files are adapted from CTI files (called CTI code
 below).  It's not clear what the licenses are for these files.
+
+
+
+
 """
 
 import warnings
