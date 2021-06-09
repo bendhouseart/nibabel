@@ -36,11 +36,361 @@ one block (512 bytes), and the frame (image) data follows.
 There is very little documentation of the ECAT format, and many of the comments
 in this code come from a combination of trial and error and wild speculation.
 
+There are ~2 formats of ECAT files EACT7 and ECAT6.3 that are widely in use,
+the byte position, header field/variable name, type, and description of each of
+formats are as follows:
+
+
+ECAT7
+########################################################################################################################
+Main Header for Matrix Data Files
+
+Byte, Variable, Name, Type,                 Comment
+0, MAGIC_NUMBER, Character*14,              UNIX file type identification number (NOT PART
+                                            OF THE MATRIX HEADER DATA)
+14, ORIGINAL_FILE_NAME,                     Character*32, Scan file’s creation name
+46, SW_VERSION, Integer*2,                  Software version number
+48, SYSTEM TYPE,Integer*2,                  Scanner model (i.e., 951, 951R, 953, 953B,
+                                            921, 922, 925, 961, 962, 966)
+50, FILE_TYPE,                              Integer*2, Enumerated type (00=unknown, 01=Sinogram, 02=Image-16,
+                                            03=Attenuation Correction, 04=Normalization,
+                                            05=Polar Map, 06=Volume 8, 07=Volume 16,
+                                            08=Projection 8, 09=Projection 16, 10=Image 8,
+                                            11=3D Sinogram 16, 12=3D Sinogram 8,
+                                            13=3D Normalization, 14=3D Sinogram Fit)
+52, SERIAL_NUMBER, Character*10,            The serial number of the gantry
+62, SCAN_START_TIME, Integer*4,             Date and time that acquisition was started (in
+                                            secs from base time)
+66, ISOTOPE_NAME, Character*8,              Isotope
+74, ISOTOPE_HALFLIFE, Real*4,               Half-life of isotope specified (in sec.)
+78, RADIOPHARMACEUTICAL,                    Character*32, Free format ASCII
+110, GANTRY_TILT, Real*4,                   Angle (in degrees)
+114, GANTRY_ROTATION, Real*4,               Angle (in degrees)
+118, BED_ELEVATION, Real*4,                 Bed height (in cm.) from lowest point
+122, INTRINSIC_TILT, Real*4,                Angle (in degrees),Angle that the first detector of Bucket 0 is offset from
+                                            top center (in degrees)
+126, WOBBLE_SPEED, Integer*2,               Revolutions/minute (0 if not wobbled)
+128, TRANSM_SOURCE_TYPE, Integer 2,         Enumerated type (SRC_NONE, _RRING, _RING, _ROD, _RROD)
+130, DISTANCE_SCANNED, Real*4,              Total distance scanned (in cm)
+134, TRANSAXIAL_FOV, Real*4,                Diameter (in cm.) of transaxial view
+138, ANGULAR_COMPRESSION, Integer*2,        Enumerated Type (0=no mash,1=mash of 2, 2=mash of 4)
+140, COIN_SAMP_MODE, Integer*2,             Enumerated type (0=Net Trues, 1=Prompts and Delayed, 3= Prompts, Delayed,
+                                            and Multiples)
+142, AXIAL_SAMP_MODE, Integer*2,            Enumerated type (0=Normal, 1=2X, 2=3X)
+144, ECAT_CALIBRATION_FACTOR, Real*4,       Quantification scale factor (to convert from ECAT counts to activity counts)
+148, CALIBRATION_UNITS, Integer*2,          Enumerated type (0=Uncalibrated, 1=Calibrated,)
+150, CALIBRATION_UNITS_LABEL, Integer*2,    Enumerated type (BLOOD_FLOW, LMRGLU)
+152, COMPRESSION_CODE, Integer*2,           Enumerated type (COMP_NONE, (This is the only value))
+154, STUDY_TYPE, Character*12,              Study descriptor
+166, PATIENT_ID, Character*16,              Patient identification descriptor
+182, PATIENT_NAME, Character*32,            Patient name (free format ASCII)
+214, PATIENT_SEX, Character*1,              Enumerated type (SEX_MALE, _FEMALE, _UNKNOWN)
+215, PATIENT_DEXTERITY, Character*1,        Enumerated type (DEXT_RT, _LF, _UNKNOWN)
+216, PATIENT_AGE, Real*4,                   Patient age (years)
+220, PATIENT_HEIGHT, Real*4,                Patient height (cm)
+224, PATIENT_WEIGHT, Real*4,                Patient weight (kg)
+228, PATIENT_BIRTH_DATE, Integer*4,         Format is YYYYMMDD
+232, PHYSICIAN_NAME, Character*32,          Attending Physician name (free format)
+264, OPERATOR_NAME, Character*32,           Operator name (free format)
+296, STUDY_DESCRIPTION, Character*32,       Free format ASCII
+328, ACQUISITION_TYPE, Integer*2,           Enumerated type (0=Undefined, 1=Blank, 2=Transmission, 3=Static emission,
+                                            4=Dynamic emission, 5=Gated emission, 6=Transmission rectilinear,
+                                            7=Emission rectilinear)
+330, PATIENT_ORIENTATION, Integer*2,        Enumerated Type (Bit 0 clear - Feet first, Bit 0 set - Head first,
+                                            Bit 1-2 00 - Prone, Bit 1-2 01 - Supine, Bit 1-2 10 - Decubitus Right,
+                                            Bit 1-2 11 - Decubitus Left)
+332, FACILITY_NAME, Character*20,           Free format ASCII
+352, NUM_PLANES, Integer*2,                 Number of planes of data collected
+354, NUM_FRAMES, Integer*2,                 Number of frames of data collected OR Highest frame number (in partially
+                                            reconstructed files)
+356, NUM_GATES, Integer*2,                  Number of gates of data collected
+358, NUM_BED_POS, Integer*2,                Number of bed positions of data collected
+360, INIT_BED_POSITION, Real*4,             Absolute location of initial bed position (in cm.)
+364, BED_POSITION(15), Real*4,              Absolute bed location (in cm.)
+424, PLANE_SEPARATION, Real*4,              Physical distance between adjacent planes (in cm.)
+428, LWR_SCTR_THRES, Integer*2,             Lowest threshold setting for scatter (in KeV)
+430, LWR_TRUE_THRES, Integer*2,             Lower threshold setting for trues in (in KeV)
+432, UPR_TRUE_THRES, Integer*2,             Upper threshold setting for trues (in KeV)
+434, USER_PROCESS_CODE, Character*10,       Data processing code (defined by user)
+444, ACQUISITION_MODE, Integer*2,           Enumerated Type (0=Normal, 1=Windowed, 2=Windowed & Nonwindowed,
+                                            3=Dual energy, 4=Upper energy, 5=Emission and Transmission)
+446, BIN_SIZE, Real*4,                      Width of view sample (in cm)
+450, BRANCHING_FRACTION, Real*4,            Fraction of decay by positron emission
+454, DOSE_START_TIME, Integer*4,            Actual time radiopharmaceutical was injected or flow was started (in sec
+                                            since base time)
+458, DOSAGE, Real*4,                        Radiopharmaceutical dosage (in bequerels/cc) at time of injection
+462, WELL_COUNTER_CORR_FACTOR, Real*4, TBD
+466, DATA_UNITS, Character*3.2
+498, SEPTA_STATE, Integer*2,                Septa position during scan (0=septa extended, 1=septa retracted)
+500, FILL(6), Integer*2,                    CTI Reserved space (12 bytes)
+
+
+########################################################################################################################
+Subheader for Matrix Attenuation Files
+
+Byte, Variable, Name, Type,                 Comment
+0, DATA_TYPE, Integer*2,                    Enumerated type (DTYPE_BYTES, _I2, _I4, _VAXR4, _SUNFL, _SUNIN)
+2, NUM_DIMENSIONS, Integer*2,               Number of dimensions
+4, ATTENUATION_TYPE, Integer*2,             E. type (ATTEN_NONE, _MEAS, _CALC)
+6, NUM_R_ELEMENTS, Integer*2,               Total elements collected (x dimension)
+8, NUM_ANGLES, Integer*2,                   Total views collected (y dimensions)
+10, NUM_Z_ELEMENTS, Integer*2,              Total elements collected (z dimension)
+12, RING_DIFFERENCE, Integer*2,             Maximum acceptance angle.
+14, X_RESOLUTION, Real*4,                   Resolution in the x dimension (in cm)
+18, Y_RESOLUTION, Real*4,                   Resolution in the y dimension (in cm)
+22, Z_RESOLUTION, Real*4,                   Resolution in the z dimension (in cm)
+26, W_RESOLUTION, Real*4,                   TBD
+30, SCALE_FACTOR, Real*4,                   Attenuation Scale Factor
+34, X_OFFSET, Real*4,                       Ellipse offset in x axis from center (in cm.)
+38, Y_OFFSET, Real*4,                       Ellipse offset in y axis from center (in cm.)
+42, X_RADIUS, Real*4,                       Ellipse radius in x axis (in cm.)
+46, Y_RADIUS, Real*4,                       Ellipse radius in y axis (in cm.)
+50, TILT_ANGLE, Real*4,                     Tilt angel of the ellipse (in degrees)
+54, ATTENUATION_COEFF, Real*4,              M u-absorption coefficient (in cm^-1)
+58, ATTENUATION_MIN, Real*4,                Minimum value in the attenuation data
+62, ATTENUATION_MAX, Real*4,                Maximum value in the attentuation data
+66, SKULL_THICKNESS, Real*4,                Skull thickness in cm
+70, NUM_ADDITIONAL_ATTN_COEFF, Integer*2,   Number of attenuation coefficients other than the Mu absorption coefficient
+                                            above (max 8)
+72, ADDITIONAL_ATTEN_COEFF(8), Real*4,      The additional attention coefficient values
+104, EDGE_FINDING_THRESHOLD, Real*4,        The threshold value used by automatic edge-detection routine
+                                            (fraction of maximum)
+108, STORAGE_ORDER, Integer*2,              Data storage order (RThetaZD, RZThetaD)
+110, SPAN, Integer*2,                       Axial compression specifier (number of ring differences spanned by a
+                                            segment)
+112, Z_ELEMENTS(64), Integer*2,             Number of "planes" in z direction for each ring difference segment
+240, FILL(86), Integer*2,                   Unused (172 bytes)
+412, FILL(50), Integer*2,                   User Reserved space (100 bytes) Note: use highest bytes first
+
+########################################################################################################################
+Subheader for Matrix Image Files
+
+Byte, Variable, Name, Type,                 Comment
+0, DATA_TYPE, Integer*2,                    Enumerated type (0=Unkonwn Matrix Data Type, 1=Byte Data, 2=VAX_Ix2, 3=VAX_Ix4,
+                                            4=VAX_Rx4, 5=IEEE Float, 6=Sun short, 7=Sun long)
+2, NUM_DIMENSIONS, Integer*2,               Number of dimensions
+4, X_DIMENSION, Integer*2,                  Dimension along x axis
+6, Y_DIMENSION, Integer*2,                  Dimension along y axis
+8, Z_DIMENSION, Integer*2,                  Dimension along z axis
+10, X_OFFSET, Real*4,                       Offset in x axis for recon target (in cm)
+14, Y_OFFSET, Real*4,                       Offset in y axis for recon target (in cm)
+18, Z_OFFSET, Real*4,                       Offset in z axis for recon target (in cm)
+22, RECON_ZOOM, Real*4,                     Reconstruction magnification factor (zoom)
+26, SCALE_FACTOR, Real*4,                   Quantification scale factor (in Quant_units)
+30, IMAGE_MIN, Integer*2,                   Image minimum pixel value
+32, IMAGE_MAX, Integer*2,                   Image maximum pixel value
+34, X_PIXEL_SIZE, Real*4,                   X dimension pixel size (in cm.)
+38, Y_PIXEL_SIZE, Real*4,                   Y dimension pixel size (in cm.)
+42, Z_PIXEL_SIZE, Real*4,                   Z dimension pixel size (in cm.)
+46, FRAME_DURATION, Integer*4,              Total duration of current frame (in msec.)
+50, FRAME_START_TIME, Integer*4,            frame start time (offset from first frame, in msec)
+54, FILTER_CODE, Integer*2,                 enumerated type (0=all pass, 1=ramp, 2=Butterworth, 3=Hanning, 4=Hamming,
+                                            5=Parzen, 6=shepp, 7=butterworth-order 2, 8=Gaussian, 9=Median, 10=Boxcar)
+56, X_RESOLUTION, Real*4,                   resolution in the x dimension (in cm)
+60, Y_RESOLUTION, Real*4,                   resolution in the y dimension (in cm)
+64, Z_RESOLUTION, Real*4,                   resolution in the z dimension (in cm)
+68, NUM_R_ELEMENTS, Real*4,                 number r elements from sinogram
+72, NUM_ANGLES, Real*4,                     number of angles from sinogram
+76, Z_ROTATION_ANGLE, Real*4,               rotation in the xy plane (in degrees). Use right-hand coordinate system for
+                                            rotation angle sign.
+80, DECAY_CORR_FCTR, Real*4,                isotope decay compensation applied to data
+84, PROCESSING_CODE, Integer*4,             bit mask (0=not processed, 1=normalized, 2=Measured Attenuation Correction,
+                                            4=Calculated attenuation correction, 8=x smoothing, 16=Y smoothing,
+                                            32=Z smoothing, 64=2d scatter correction, 128=3D scatter correction,
+                                            256=arc correction, 512=decay correction, 1024=Online compression)
+88, GATE_DURATION, Integer*4,               gate duration (in msec)
+92, R_WAVE_OFFSET, Integer*4,               r wave offset (for phase sliced studies, average, in msec)
+96, NUM_ACCEPTED_BEATS, Integer*4,          number of accepted beats for this gate
+100, FILTER_CUTOFF_FREQUENCY,               real*4, cutoff frequency
+104, FILTER_RESOLUTION, Real*4,             do not use
+108, FILTER_RAMP_SLOPE, Real*4,             do not use
+112, FILTER_ORDER, Integer*2,               do not use
+114, FILTER_SCATTER_FRACTION, Real*4,       do not use
+118, FILTER_SCATTER_SLOPE,Real*4,           do not use
+122, ANNOTATION, Character*40,              free format ascii
+162, MT_1_1, Real*4,                        matrix transformation element (1,1).
+166, MT_1_2, Real*4,                        matrix transformation element (1,2).
+170, MT_1_3, Real*4,                        matrix transformation element (1,3).
+174, MT_2_1, Real*4,                        matrix transformation element (2,1).
+178, MT_2_2, Real*4,                        matrix transformation element (2,2).
+182, MT_2_3, Real*4,                        matrix transformation element (2,3).
+186, MT_3_1, Real*4,                        matrix transformation element (3,1).
+190, MT_3_2, Real*4,                        matrix transformation element (3,2).
+194, MT_3_3, Real*4,                        matrix transformation element (3,3).
+198, RFILTER_CUTOFF, Real*4
+202, RFILTER_RESOLUTION, Real*4
+206, RFILTER_CODE, Integer*2
+208, RFILTER_ORDER, Integer*2
+210, ZFILTER_CUTOFF, Real*4
+214, ZFILTER_RESOLUTION, Real*4
+218, ZFILTER_CODE, Integer*2
+220, ZFILTER_ORDER, Integer*2
+222, MT_1_4, Real*4,                        Matrix transformation element (1,4)
+226, MT_2_4, Real*4,                        Matrix transformation element (2,4)
+230, MT_3_4, Real*4,                        Matrix transformation element (3,4)
+234, SCATTER_TYPE, Integer*2,               Enumerated type (0=None, 1=Deconvolution, 2=Simulated, 3=Dual Energy)
+236, RECON_TYPE, Integer*2,                 Enumerated type (0=Filtered backprojection,
+                                            1=Forward projection 3D (PROMIS), 2=Ramp 3D, 3=FAVOR 3D, 4=SSRB,
+                                            5=Multi-slice rebinning, 6=FORE)
+238 RECON_VIEWS, Integer*2,                 Number of views used to reconstruct the data
+240, FILL(87), Integer*2,                   CTI Reserved space (174 bytes)
+414 FILL(48), Integer*2,                    User Reserved space (100 bytes) Note: Use highest bytes first
+
+########################################################################################################################
+Subheader for Matrix Polar Map Files
+
+Byte, Variable Name, Type,                  Comment
+0, DATA_TYPE, Integer*2,                    Enumerated type (DTYPE_BYTES, _I2,_I4)
+2, POLAR_MAP_TYPE, Integer*2,               Enumerated Type (Always 0 for now; denotes the version of the PM structure)
+4, NUM_RINGS, Integer*2,                    Number of rings in this polar map
+6, SECTORS_PER_RING(32), Integer*2,         Number of sectors in each ring for up to 32 rings
+                                            (1, 9, 18, or 32 sectors normally)
+70, RING_POSITION(32), Real*4,              Fractional distance along the long axis from base to apex
+198, RING_ANGLE(32), Integer*2,             Ring angle relative to long axis(90 degrees along cylinder,
+                                            decreasing to 0 at the apex)
+262, START_ANGLE, Integer*2,                Start angle for rings (Always 258 degrees, defines Polar Map’s 0)
+264, LONG_AXIS_LEFT(3), Integer*2,          x, y, z location of long axis base end (in pixels)
+270, LONG_AXIS_RIGHT(3), Integer*2,         x, y, z location of long axis apex end (in pixels)
+276, POSITION_DATA, Integer*2,              Enumerated type (0 - Not available, 1 - Present)
+278, IMAGE_MIN, Integer*2,                  Minimum pixel value in this polar map
+280, IMAGE_MAX, Integer*2,                  Maximum pixel value in this polar map
+282, SCALE_FACTOR, Real*4,                  Scale factor to restore integer values to float values
+286, PIXEL_SIZE, Real*4,                    Pixel size (in cubic cm, represents voxels)
+290, FRAME_DURATION, Integer*4,             Total duration of current frame (in msec)
+294, FRAME_START_TIME, Integer*4,           Frame start time (offset from first frame, in msec)
+298, PROCESSING_CODE, Integer*2,            Bit Encoded (1- Map type (0 = Sector Analysis, 1 = Volumetric),
+                                            2 - Threshold Applied, 3 - Summed Map, 4 - Subtracted Map,
+                                            5 - Product of two maps, 6 - Ratio of two maps, 7 - Bias,
+                                            8 - Multiplier, 9 - Transform, 10 - Polar Map calculational protocol used)
+300, QUANT_UNITS, Integer*2,                Enumerated Type (0 - Default (see main header), 1 - Normalized, 2 - Mean,
+                                            3 - Std. Deviation from Mean)
+302, ANNOTATION, Character*40,              label for polar map display
+342, GATE_DURATION, Integer*4,              Gate duration (in msec)
+346, R_WAVE_OFFSET, Integer*4,              R wave offset (Average, in msec)
+350, NUM_ACCEPTED_BEATS, Integer*4          Number of accepted beats for this gate
+354, POLAR_MAP_PROTOCOL, Character*20,      Polar Map protocol used to generate this polar map
+374, DATABASE_NAME,Character*30,            Database name used for polar map comparison
+404, FILL(27), Integer*2,                   Reserved for future CTI use (54 bytes)
+464, FILL(27), Integer*2,                   User reserved space (54 bytes) Note: Use highest bytes first
+
+
+########################################################################################################################
+Subheader for 3D Matrix Scan Files
+
+Byte, Variable Name, Type,                  Comment
+0, DATA_TYPE, Integer*2,                    Enumerated type (ByteData, SunShortt)
+2, NUM_DIMENSIONS, Integer*2,               Number of Dimensions
+4, NUM_R_ELEMENTS, Integer*2,               Total views collected (θ dimension)
+6, NUM_ANGLES, Integer*2,                   Total views collected (θ dimension)
+8, CORRECTIONS_APPLIED, Integer*2,          Designates processing applied to scan data
+                                            (Bit encoded, Bit 0 - Norm, Bit 1 - Atten, Bit 2 - Smooth)
+10, NUM_Z_ELEMENTS(64), Integer*2,          Number of elements in z dimension for each ring difference segment in
+                                            3D scans
+138, RING_DIFFERENCE, Integer*2,            Max ring difference (d dimension) in this frame
+140, STORAGE_ORDER, Integer*2,              Data storage order (rθzd or rzθd)
+142, AXIAL_COMPRESSION, Integer*2,          Axial compression code or factor, generally referred to as SPAN
+144, X_RESOLUTION, Real*4,                  Resolution in the r dimension (in cm)
+148, V_RESOLUTION, Real*4,                  Resolution in the θ dimension (in radians)
+152, Z_RESOLUTION, Real*4,                  Resolution in the z dimension (in cm)
+156, W_RESOLUTION, Real*4,                  Not Used
+160, FILL(6), Integer*2,                    RESERVED for gating
+172, GATE_DURATION, Integer*4,              Gating segment length (msec, Average time if phased gates are used)
+176, R_WAVE_OFFSET, Integer*4,              Time from start of first gate (Average, in msec.)
+180, NUM_ACCEPTED_BEATS, Integer*4,         Number of accepted beats for this gate
+184, SCALE_FACTOR, Real*4,                  If data type is integer, this factor is used to convert to float values
+188, SCAN_MIN, Integer*2,                   Minimum value in sinogram if data is in integer form
+                                            (not currently filled in)
+190, SCAN_MAX, Integer*2,                   Maximum value in sinogram if data is in integer form
+                                            (not currently filled in)
+192, PROMPTS, Integer*4,                    Total prompts collected in this frame/gate
+196, DELAYED, Integer*4,                    Total delays collected in this frame/gate
+200, MULTIPLES, Integer*4,                  Total multiples collected in this frame/gate (notused)
+204, NET_TRUES, Integer*4,                  Total net trues (prompts–-randoms)
+208, TOT_AVG_COR, Real*4,                   Mean value of loss-corrected singles
+212, TOT_AVG_UNCOR, Real*4,                 Mean value of singles (not loss corrected)
+216, TOTAL_COIN_RATE, Integer*4,            Measured coincidence rate (from IPCP)
+220, FRAME_START_TIME, Integer*4,           Time offset from first frame time (in msec.)
+224, FRAME_DURATION, Integer*4,             Total duration of current frame (in msec.)
+228, DEADTIME_CORRECTION_FACTOR, Real*4,    Dead-time correction factor applied to the sinogram
+232, FILL(90), Integer*2,                   CTI Reserved space (180 bytes)
+412, FILL(50), Integer*2,                   User Reserved space (100 bytes) Note: Use highest bytes first
+512, UNCOR_SINGLES(128), Real*4,            Total uncorrected singles from each bucket
+
+########################################################################################################################
+Subheader for 3D normalized Files
+
+Byte, Variable Name, Type,                  Comment
+0, DATA_TYPE, Integer*2,                    Enumerated type (IeeeFloat)
+2, NUM_R_ELEMENTS, Integer*2,               Total elements collected (y dimension)
+4, NUM_TRANSAXIAL_CRYSTALS, Integer*2,      Number of transaxial crystals per block
+6, NUM_CRYSTAL_RINGS, Integer*2,            Number of crystal rings
+8, CRYSTALS_PER_RING, Integer*2,            Number of crystals per ring
+10, NUM_GEO_CORR_PLANES, Integer*2,         Number of rows in the Plane Geometric Correction array
+12, ULD, Integer*2,                         Upper energy limit
+14, LLD, Integer*2,                         Lower energy limit
+16, SCATTER_ENERGY, Integer*2,              Scatter energy threshold
+18, NORM_QUALITY_FACTOR, Real*4,            Used by Daily Check to determine the quality of the scanner
+22, NORM_QUALITY_FACTOR_CODE,               Enumerated Type (TBD)
+24, RING_DTCOR1(32), Real*4,                First “per ring” dead time correction coefficient
+152, RING_DTCOR2(32), Real*4,               Second “per ring” dead time correction coefficient
+280, CRYSTAL_DTCOR(8), Real*4,              Dead time correction factors for transaxial crystals
+312, SPAN, Integer*2,                       Axial compression specifier (number of ring differences included in
+                                            each segment)
+314, MAX_RING_DIFF, Integer*2,              Maximum ring difference acquired
+316, FILL(48), Integer*2,                   CTI Reserved space (96 bytes)
+412, FILL(50), Integer*2,                   User Reserved space (100 bytes) Note: Use highest bytes first
+
+########################################################################################################################
+Subheader for Imported 6.5 Matrix Scan Files
+
+Version 6.5 scan files that or imported into version 7.X cannot be reconstructed. The subheader is only 512 bytes,
+rather than 1024.
+
+Byte, Variable Name, Type,                  Comment
+0, DATA_TYPE, Integer*2,                    Enumerated type (DTYPE_BYTES, _I2, _I4, _VAXR4, _SUNFL, _SUNIN)
+2, NUM_DIMENSIONS, Integer*2,               Number of Dimensions
+4, NUM_R_ELEMENTS, Integer*2,               Total elements collected (x dimension)
+6, NUM_ANGLES, Integer*2,                   Total views collected (y dimension)
+8, CORRECTIONS_APPLIED, Integer*2,          Designates processing applied to scan data (Bit encoded, Bit 0 - Norm,
+                                            Bit 1 - Atten, Bit 2 - Smooth)
+10, NUM_Z_ELEMENTS, Integer*2,              Total elements collected (z dimension) For 3D scans
+12, RING_DIFFERENCE, Integer*2,             Maximum acceptance angle
+14, X_RESOLUTION, Real*4,                   Resolution in the x dimension (in cm)
+18, Y_RESOLUTION, Real*4,                   Resolution in the y dimension (in cm)
+22, Z_RESOLUTION, Real*4,                   Resolution in the z dimension (in cm)
+26, W_RESOLUTION, Real*4,                   TBD
+30, FILL(6), Integer*2,                     RESERVED for gating
+42, GATE_DURATION, Integer*4,               Gating segment length (msec, Average time if phased gates are used)
+46, R_WAVE_OFFSET, Integer*4,               Time from start of first gate (Average, in msec.)
+50, NUM_ACCEPTED_BEATS, Integer*4,          Number of accepted beats for this gate
+50, SCALE_FACTOR, Real*4,                   If data type=integer, use this factor, convert to float values
+58, SCAN_MIN, Integer*2,                    Minimum value in sinogram if data is in integer form
+60, SCAN_MAX, Integer*2,                    Maximum value in sinogram if data is in integer form
+62, PROMPTS, Integer*4,                     Total prompts collected in this frame/gate
+66, DELAYED, Integer*4,                     Total delays collected in thes frame/gate
+70, MULTIPLES, Integer*4,                   Total multiples collected in the frame/gate
+74, NET_TRUES, Integer*4,                   Total net trues (prompts--randoms)
+78, COR_SINGLES(16), Real*4,                Total singles with loss correction factoring
+142, UNCOR_SINGLES(16), Real*4,             Total singles without loss correction factoring
+206, TOT_AVG_COR, Real*4,                   Mean value of loss-corrected singles
+210, TOT_AVG_UNCOR, Real*4,                 Mean value of singles (not loss corrected)
+214, TOTAL_COIN_RAIN, Integer*4,            Measured coincidence rate (from IPCP)
+218, FRAME_START_TIME, Integer*4,           Time offset from first frame time (in msec.)
+222, FRAME_DURATION, Integer*4,             Total duration of current frame (in msec.)
+226, DEADTIME_CORRECTION_FACTOR, Real*4,    Dead-time correction factor applied to the sinogram
+230, PHYSICAL_PLANES, Integer*2,            Physical planes that make up this logical plane
+246, FILL(83), Integer*2,                   CTI Reserved space (166 bytes)
+412, FILL(50) Integer*2,                    User Reserved space (100 bytes) Note: use highest bytes first
+
 XMedcon can read and write ECAT 6 format, and read ECAT 7 format: see
 http://xmedcon.sourceforge.net and the ECAT files in the source of XMedCon,
 currently ``libs/tpc/*ecat*`` and ``source/m-ecat*``.  Unfortunately XMedCon is
 GPL and some of the header files are adapted from CTI files (called CTI code
 below).  It's not clear what the licenses are for these files.
+
+
+
+
 """
 
 import warnings
