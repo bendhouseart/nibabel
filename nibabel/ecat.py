@@ -263,6 +263,109 @@ Byte, Variable Name, Type, Comment
 464, FILL(27), Integer*2,                   User reserved space (54 bytes) Note: Use highest bytes first
 
 
+########################################################################################################################
+Subheader for 3D Matrix Scan Files
+
+Byte, Variable Name, Type, Comment
+0, DATA_TYPE, Integer*2, Enumerated type (ByteData, SunShortt)
+2, NUM_DIMENSIONS, Integer*2, Number of Dimensions
+4, NUM_R_ELEMENTS, Integer*2, Total views collected (θ dimension)
+6, NUM_ANGLES, Integer*2, Total views collected (θ dimension)
+8, CORRECTIONS_APPLIED, Integer*2, Designates processing applied to scan data (Bit encoded, Bit 0 - Norm, Bit 1 - Atten, Bit 2 - Smooth)
+10, NUM_Z_ELEMENTS(64), Integer*2, Number of elements in z dimension for each ring difference segment in 3D scans
+138, RING_DIFFERENCE, Integer*2, Max ring difference (d dimension) in this frame
+140, STORAGE_ORDER, Integer*2, Data storage order (rθzd or rzθd)
+142, AXIAL_COMPRESSION, Integer*2, Axial compression code or factor, generally referred to as SPAN
+144, X_RESOLUTION, Real*4, Resolution in the r dimension (in cm)
+148, V_RESOLUTION, Real*4, Resolution in the θ dimension (in radians)
+152, Z_RESOLUTION, Real*4, Resolution in the z dimension (in cm)
+156, W_RESOLUTION, Real*4, Not Used
+160, FILL(6), Integer*2, RESERVED for gating
+172, GATE_DURATION, Integer*4, Gating segment length (msec, Average time if phased gates are used)
+176, R_WAVE_OFFSET, Integer*4, Time from start of first gate (Average, in msec.)
+180, NUM_ACCEPTED_BEATS, Integer*4, Number of accepted beats for this gate
+184, SCALE_FACTOR, Real*4, If data type is integer, this factor is used to convert to float values
+188, SCAN_MIN, Integer*2, Minimum value in sinogram if data is in integer form (not currently filled in)
+190, SCAN_MAX, Integer*2, Maximum value in sinogram if data is in integer form (not currently filled in)
+192, PROMPTS, Integer*4, Total prompts collected in this frame/gate
+196, DELAYED, Integer*4, Total delays collected in this frame/gate
+200, MULTIPLES, Integer*4, Total multiples collected in this frame/gate (notused)
+204, NET_TRUES, Integer*4, Total net trues (prompts–-randoms)
+208, TOT_AVG_COR, Real*4, Mean value of loss-corrected singles
+212, TOT_AVG_UNCOR, Real*4, Mean value of singles (not loss corrected)
+216, TOTAL_COIN_RATE, Integer*4, Measured coincidence rate (from IPCP)
+220, FRAME_START_TIME, Integer*4, Time offset from first frame time (in msec.)
+224, FRAME_DURATION, Integer*4, Total duration of current frame (in msec.)
+228, DEADTIME_CORRECTION_FACTOR, Real*4, Dead-time correction factor applied to the sinogram
+232, FILL(90), Integer*2, CTI Reserved space (180 bytes)
+412, FILL(50), Integer*2, User Reserved space (100 bytes) Note: Use highest bytes first
+512, UNCOR_SINGLES(128), Real*4, Total uncorrected singles from each bucket
+
+########################################################################################################################
+Subheader for 3D normalized Files
+
+Byte, Variable Name, Type, Comment
+0, DATA_TYPE, Integer*2, Enumerated type (IeeeFloat)
+2, NUM_R_ELEMENTS, Integer*2, Total elements collected (y dimension)
+4, NUM_TRANSAXIAL_CRYSTALS, Integer*2, Number of transaxial crystals per block
+6, NUM_CRYSTAL_RINGS, Integer*2, Number of crystal rings
+8, CRYSTALS_PER_RING, Integer*2, Number of crystals per ring
+10, NUM_GEO_CORR_PLANES, Integer*2, Number of rows in the Plane Geometric Correction array
+12, ULD, Integer*2, Upper energy limit
+14, LLD, Integer*2 Lower energy limit
+16, SCATTER_ENERGY, Integer*2, Scatter energy threshold
+18, NORM_QUALITY_FACTOR, Real*4, Used by Daily Check to determine the quality of the scanner
+22, NORM_QUALITY_FACTOR_CODE, Enumerated Type (TBD)
+24, RING_DTCOR1(32), Real*4, First “per ring” dead time correction coefficient
+152, RING_DTCOR2(32), Real*4, Second “per ring” dead time correction coefficient
+280, CRYSTAL_DTCOR(8), Real*4, Dead time correction factors for transaxial crystals
+312, SPAN, Integer*2, Axial compression specifier (number of ring differences included in each segment)
+314, MAX_RING_DIFF, Integer*2, Maximum ring difference acquired
+316, FILL(48), Integer*2, CTI Reserved space (96 bytes)
+412, FILL(50), Integer*2, User Reserved space (100 bytes) Note: Use
+highest bytes first
+
+########################################################################################################################
+Subheader for Imported 6.5 Matrix Scan Files
+
+Version 6.5 scan files that or imported into version 7.X cannot be reconstructed. The subheader is only 512 bytes,
+rather than 1024.
+
+Byte, Variable Name, Type, Comment
+0, DATA_TYPE, Integer*2, Enumerated type (DTYPE_BYTES, _I2, _I4, _VAXR4, _SUNFL, _SUNIN)
+2, NUM_DIMENSIONS, Integer*2, Number of Dimensions
+4, NUM_R_ELEMENTS, Integer*2, Total elements collected (x dimension)
+6, NUM_ANGLES, Integer*2, Total views collected (y dimension)
+8, CORRECTIONS_APPLIED, Integer*2, Designates processing applied to scan data (Bit encoded, Bit 0 - Norm, Bit 1 - Atten, Bit 2 - Smooth)
+10, NUM_Z_ELEMENTS, Integer*2, Total elements collected (z dimension) For 3D scans
+12, RING_DIFFERENCE, Integer*2, Maximum acceptance angle
+14, X_RESOLUTION, Real*4, Resolution in the x dimension (in cm)
+18, Y_RESOLUTION, Real*4, Resolution in the y dimension (in cm)
+22, Z_RESOLUTION, Real*4, Resolution in the z dimension (in cm)
+26, W_RESOLUTION, Real*4, TBD
+30, FILL(6), Integer*2, RESERVED for gating
+42, GATE_DURATION, Integer*4, Gating segment length (msec, Average time if phased gates are used)
+46, R_WAVE_OFFSET, Integer*4, Time from start of first gate (Average, in msec.)
+50, NUM_ACCEPTED_BEATS, Integer*4, Number of accepted beats for this gate
+50, SCALE_FACTOR, Real*4, If data type=integer, use this factor, convert to float values
+58, SCAN_MIN, Integer*2, Minimum value in sinogram if data is in integer form
+60, SCAN_MAX, Integer*2, Maximum value in sinogram if data is in integer form
+62, PROMPTS, Integer*4, Total prompts collected in this frame/gate
+66, DELAYED, Integer*4, Total delays collected in thes frame/gate
+70, MULTIPLES, Integer*4, Total multiples collected in the frame/gate
+74, NET_TRUES, Integer*4, Total net trues (prompts--randoms)
+78, COR_SINGLES(16), Real*4, Total singles with loss correction factoring
+142, UNCOR_SINGLES(16), Real*4, Total singles without loss correction factoring
+206, TOT_AVG_COR, Real*4, Mean value of loss-corrected singles
+210, TOT_AVG_UNCOR, Real*4, Mean value of singles (not loss corrected)
+214, TOTAL_COIN_RAIN, Integer*4, Measured coincidence rate (from IPCP)
+218, FRAME_START_TIME, Integer*4, Time offset from first frame time (in msec.)
+222, FRAME_DURATION, Integer*4, Total duration of current frame (in msec.)
+226, DEADTIME_CORRECTION_FACTOR, Real*4, Dead-time correction factor applied to the sinogram
+230, PHYSICAL_PLANES, Integer*2, Physical planes that make up this logical plane
+246, FILL(83), Integer*2, CTI Reserved space (166 bytes)
+412, FILL(50) Integer*2, User Reserved space (100 bytes) Note: use highest bytes first
+
 XMedcon can read and write ECAT 6 format, and read ECAT 7 format: see
 http://xmedcon.sourceforge.net and the ECAT files in the source of XMedCon,
 currently ``libs/tpc/*ecat*`` and ``source/m-ecat*``.  Unfortunately XMedCon is
