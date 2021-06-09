@@ -40,6 +40,71 @@ There are ~2 formats of ECAT files EACT7 and ECAT6.3 that are widely in use,
 the byte position, header field/variable name, type, and description of each of
 formats are as follows:
 
+ECAT 6.3
+########################################################################################################################
+
+Main Header for Matrix Data Files
+
+When Filled, Byte, Variable Name, Type, Comment
+ , 0, %FILL(14), Integer*2, User reserved space (28 bytes)
+A, 28, ORIGINAL_FILE_NAME, Character*20, Scan file's creation name
+A, 48, SW_VERSION, Integer*2, Enumerated type (VER_PRE5, VER_5, etc.)
+A, 50, DATA_TYPE, Integer*2, E. Type (DTYPE_BYTES, DTYPE_12, etc.)
+A, 52, SYSTEM_TYPE, Integer*2, E. Type (MODEL_911_01, _02, etc.)
+A, 54, FILE_TYPE, Integer*2, E. Type (FTYPE_SCAN, _IMAGE, etc.)
+C, 56, NODE_ID, Character*10, Unique ID of the ECAT system used
+C, 66, SCAN_START_DAY, Integer*2, Day acquisition was started
+C, 68, SCAN_START_MONTH, Integer*2, Month acquisition was started
+C, 70, SCAN_START_YEAR, Integer*2, Year acquisition was started
+C, 72, SCAN_START_HOUR, Integer*2, Hour acquisition was started
+C, 74, SCAN_START_MINUTE, Integer*2, Minute acquisition was started
+C, 76, SCAN_START_SECOND, Integer*2, Second acquisition was started
+A, 78, ISOTOPE_CODE, Character*8, Isotope specifier
+A, 86, ISOTOPE_HALFLIFE, Real*4, Half-life of isotope specified (in sec.)
+A, 90, RADIOPHARMACUETICAL, Character*32, Free format ASCII
+A, 122, GANTRY_TILT, Real*4, Angle (in degrees)
+A, 126, GANTRY_ROTATION, Real*4, Angle (in degrees)
+A, 130, BED_ELEVATION, Real*4, Bed height (in cm.) from lowest point
+A, 134, ROT_SOURCE_SPEED, Integer*2, Revolutions/minute (0 if not rotating)
+A, 136, WOBBLE_SPEED, Integer*2, Revolutions/minute (0 if not wobbled)
+A, 138, TRANSM_SOURCE_TYPE, Integer*2, Enumerated type (SRC_NONE, _RRS, etc.)
+A, 140, AXIAL_FOV, Real*4, Distance (in cm.) from first to last plane
+A, 144, TRANSAXIAL_FOV, Real*4, Distance (in cm.) of transaxial view
+A, 148, TRANSAXIAL_SAMP_MODE, Integer*2, Enumerated Type (XSAMP_STAT, _3, etc.)
+A, 150, COIN_SAMP_MODE, Integer*2, E. type (CSAMP_NET_TRUES, etc.)
+A, 152, AXIAL_SAMP_MODE, Integer*2, E. type (ASAMP_NORM, _2X, etc.)
+C, 154, CALIBRATION_FACTOR, Real*4, Quantification scale factor
+C, 158, CALIBRATION_UNITS, Integer*2, Enumerated type (UNIT_UCIML, etc.)
+B/C, 160, COMPRESSION_CODE, Integer*2, Enumerate type (COMP_NONE, etc.)
+A, 162, STUDY_NAME, Character*12, Study descriptor
+A, 174, PATIENT_ID, Character*16, Patient identification descriptor
+A, 190, PATIENT_NAME, Character*32, Patient name (free format ASCII)
+A, 222, PATIENT_SEX, Character*1, E. type (SEX_MALE, _FEMALE, etc.)
+A, 223, PATIENT_AGE, Character*10, Patient age (free format)
+A, 233, PATIENT_HEIGHT, Character*10, Patient height (free format)
+A, 243, PATIENT_WEIGHT, Character*10, Patient weight (free format)
+A, 253, PATIENT_DEXTERITY, Character*1, E. type (DEXT_RT, _LF, _AMB, etc.)
+A, 254, PHYSICIAN_NAME, Character*32, Physician name (free format)
+A, 286, OPERATOR_NAME, Character*32, Operator name (free format)
+A, 318, STUDY_DESCRIPTION, Character*32, Free format ASCII
+A, 350, ACQUISITION_TYPE, Integer*2, E. type (ACQ_RECTTR, _DYEM, etc.)
+A, 352, BED_TYPE, Integer*2, E. type (BED_CTI, BED_SIEMENS, etc.)
+A, 354, SEPTA_TYPE, Integer*2, E. type (SEPTA_NONE, 3MM, etc.)
+A, 356, FACILITY_NAME, Character*20, Free format ASCII
+A, 376, NUM_PLANES, Integer*2, Number of planes of data collected
+A, 378, NUM_FRAMES, Integer*2, Number of frames of data collected
+A, 380, NUM_GATES, Integer*2, Number of gates of data collected
+A, 382, NUM_BED_POS, Integer*2, Number of bed positions of data collected
+A, 384, INIT_BED_POSITION, Real*4, Absolute bed location of bed position 0 (cm.)
+A, 388, BED_OFFSET(15), Real*4, Offset from INIT_BED_POSITION (in cm.)
+A, 448, PLANE_SEPARATION, Real*4, Distance between adjacent planes (in cm.)
+A, 452, LWR_SCTR_THRES, Integer*2, Lowest threshold setting for scatter (in KeV)
+A, 454, LWR_TRUE_THRES, Integer*2, Lower threshold setting for trues (in KeV)
+A, 456, UPR_TRUE_THRES, Integer*2, Upper threshold setting for trues (in KeV)
+A, 458, COLLIMATOR, Real*4, Collimator position (if applicable--911's)
+ , 462, USER_PROCESS_CODE, Character*10, Data processing code (defined by user)
+ , 472, %FILL(20), Integer*2, User reserved space (40 bytes)
+
 
 ECAT7
 ########################################################################################################################
