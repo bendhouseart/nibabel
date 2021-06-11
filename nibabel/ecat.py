@@ -43,72 +43,162 @@ formats are as follows:
 ECAT 6.3
 ########################################################################################################################
 
-Main Header for Matrix Data Files
+Main Header for Matrix Data Files ECAT6.3
 
-When Filled, Byte, Variable Name, Type, Comment
- , 0, %FILL(14), Integer*2, User reserved space (28 bytes)
-A, 28, ORIGINAL_FILE_NAME, Character*20, Scan file's creation name
-A, 48, SW_VERSION, Integer*2, Enumerated type (VER_PRE5, VER_5, etc.)
-A, 50, DATA_TYPE, Integer*2, E. Type (DTYPE_BYTES, DTYPE_12, etc.)
-A, 52, SYSTEM_TYPE, Integer*2, E. Type (MODEL_911_01, _02, etc.)
-A, 54, FILE_TYPE, Integer*2, E. Type (FTYPE_SCAN, _IMAGE, etc.)
-C, 56, NODE_ID, Character*10, Unique ID of the ECAT system used
-C, 66, SCAN_START_DAY, Integer*2, Day acquisition was started
-C, 68, SCAN_START_MONTH, Integer*2, Month acquisition was started
-C, 70, SCAN_START_YEAR, Integer*2, Year acquisition was started
-C, 72, SCAN_START_HOUR, Integer*2, Hour acquisition was started
-C, 74, SCAN_START_MINUTE, Integer*2, Minute acquisition was started
-C, 76, SCAN_START_SECOND, Integer*2, Second acquisition was started
-A, 78, ISOTOPE_CODE, Character*8, Isotope specifier
-A, 86, ISOTOPE_HALFLIFE, Real*4, Half-life of isotope specified (in sec.)
-A, 90, RADIOPHARMACUETICAL, Character*32, Free format ASCII
-A, 122, GANTRY_TILT, Real*4, Angle (in degrees)
-A, 126, GANTRY_ROTATION, Real*4, Angle (in degrees)
-A, 130, BED_ELEVATION, Real*4, Bed height (in cm.) from lowest point
-A, 134, ROT_SOURCE_SPEED, Integer*2, Revolutions/minute (0 if not rotating)
-A, 136, WOBBLE_SPEED, Integer*2, Revolutions/minute (0 if not wobbled)
-A, 138, TRANSM_SOURCE_TYPE, Integer*2, Enumerated type (SRC_NONE, _RRS, etc.)
-A, 140, AXIAL_FOV, Real*4, Distance (in cm.) from first to last plane
-A, 144, TRANSAXIAL_FOV, Real*4, Distance (in cm.) of transaxial view
-A, 148, TRANSAXIAL_SAMP_MODE, Integer*2, Enumerated Type (XSAMP_STAT, _3, etc.)
-A, 150, COIN_SAMP_MODE, Integer*2, E. type (CSAMP_NET_TRUES, etc.)
-A, 152, AXIAL_SAMP_MODE, Integer*2, E. type (ASAMP_NORM, _2X, etc.)
-C, 154, CALIBRATION_FACTOR, Real*4, Quantification scale factor
-C, 158, CALIBRATION_UNITS, Integer*2, Enumerated type (UNIT_UCIML, etc.)
-B/C, 160, COMPRESSION_CODE, Integer*2, Enumerate type (COMP_NONE, etc.)
-A, 162, STUDY_NAME, Character*12, Study descriptor
-A, 174, PATIENT_ID, Character*16, Patient identification descriptor
-A, 190, PATIENT_NAME, Character*32, Patient name (free format ASCII)
-A, 222, PATIENT_SEX, Character*1, E. type (SEX_MALE, _FEMALE, etc.)
-A, 223, PATIENT_AGE, Character*10, Patient age (free format)
-A, 233, PATIENT_HEIGHT, Character*10, Patient height (free format)
-A, 243, PATIENT_WEIGHT, Character*10, Patient weight (free format)
-A, 253, PATIENT_DEXTERITY, Character*1, E. type (DEXT_RT, _LF, _AMB, etc.)
-A, 254, PHYSICIAN_NAME, Character*32, Physician name (free format)
-A, 286, OPERATOR_NAME, Character*32, Operator name (free format)
-A, 318, STUDY_DESCRIPTION, Character*32, Free format ASCII
-A, 350, ACQUISITION_TYPE, Integer*2, E. type (ACQ_RECTTR, _DYEM, etc.)
-A, 352, BED_TYPE, Integer*2, E. type (BED_CTI, BED_SIEMENS, etc.)
-A, 354, SEPTA_TYPE, Integer*2, E. type (SEPTA_NONE, 3MM, etc.)
-A, 356, FACILITY_NAME, Character*20, Free format ASCII
-A, 376, NUM_PLANES, Integer*2, Number of planes of data collected
-A, 378, NUM_FRAMES, Integer*2, Number of frames of data collected
-A, 380, NUM_GATES, Integer*2, Number of gates of data collected
-A, 382, NUM_BED_POS, Integer*2, Number of bed positions of data collected
-A, 384, INIT_BED_POSITION, Real*4, Absolute bed location of bed position 0 (cm.)
-A, 388, BED_OFFSET(15), Real*4, Offset from INIT_BED_POSITION (in cm.)
-A, 448, PLANE_SEPARATION, Real*4, Distance between adjacent planes (in cm.)
-A, 452, LWR_SCTR_THRES, Integer*2, Lowest threshold setting for scatter (in KeV)
-A, 454, LWR_TRUE_THRES, Integer*2, Lower threshold setting for trues (in KeV)
-A, 456, UPR_TRUE_THRES, Integer*2, Upper threshold setting for trues (in KeV)
-A, 458, COLLIMATOR, Real*4, Collimator position (if applicable--911's)
- , 462, USER_PROCESS_CODE, Character*10, Data processing code (defined by user)
- , 472, %FILL(20), Integer*2, User reserved space (40 bytes)
+When Filled, Byte, Variable Name, Type,     Comment
+ , 0, %FILL(14), Integer*2,                 User reserved space (28 bytes)
+A, 28, ORIGINAL_FILE_NAME,                  Character*20, Scan file's creation name
+A, 48, SW_VERSION, Integer*2,               Enumerated type (VER_PRE5, VER_5, etc.)
+A, 50, DATA_TYPE, Integer*2,                E. Type (DTYPE_BYTES, DTYPE_12, etc.)
+A, 52, SYSTEM_TYPE, Integer*2,              E. Type (MODEL_911_01, _02, etc.)
+A, 54, FILE_TYPE, Integer*2,                E. Type (FTYPE_SCAN, _IMAGE, etc.)
+C, 56, NODE_ID, Character*10,               Unique ID of the ECAT system used
+C, 66, SCAN_START_DAY, Integer*2,           Day acquisition was started
+C, 68, SCAN_START_MONTH, Integer*2,         Month acquisition was started
+C, 70, SCAN_START_YEAR, Integer*2,          Year acquisition was started
+C, 72, SCAN_START_HOUR, Integer*2,          Hour acquisition was started
+C, 74, SCAN_START_MINUTE, Integer*2,        Minute acquisition was started
+C, 76, SCAN_START_SECOND, Integer*2,        Second acquisition was started
+A, 78, ISOTOPE_CODE, Character*8,           Isotope specifier
+A, 86, ISOTOPE_HALFLIFE, Real*4,            Half-life of isotope specified (in sec.)
+A, 90, RADIOPHARMACUETICAL, Character*32,   Free format ASCII
+A, 122, GANTRY_TILT, Real*4,                Angle (in degrees)
+A, 126, GANTRY_ROTATION, Real*4,            Angle (in degrees)
+A, 130, BED_ELEVATION, Real*4,              Bed height (in cm.) from lowest point
+A, 134, ROT_SOURCE_SPEED, Integer*2,        Revolutions/minute (0 if not rotating)
+A, 136, WOBBLE_SPEED, Integer*2,            Revolutions/minute (0 if not wobbled)
+A, 138, TRANSM_SOURCE_TYPE, Integer*2,      Enumerated type (SRC_NONE, _RRS, etc.)
+A, 140, AXIAL_FOV, Real*4,                  Distance (in cm.) from first to last plane
+A, 144, TRANSAXIAL_FOV, Real*4,             Distance (in cm.) of transaxial view
+A, 148, TRANSAXIAL_SAMP_MODE, Integer*2,    Enumerated Type (XSAMP_STAT, _3, etc.)
+A, 150, COIN_SAMP_MODE, Integer*2,          E. type (CSAMP_NET_TRUES, etc.)
+A, 152, AXIAL_SAMP_MODE, Integer*2,         E. type (ASAMP_NORM, _2X, etc.)
+C, 154, CALIBRATION_FACTOR, Real*4,         Quantification scale factor
+C, 158, CALIBRATION_UNITS, Integer*2,       Enumerated type (UNIT_UCIML, etc.)
+B/C, 160, COMPRESSION_CODE, Integer*2,      Enumerate type (COMP_NONE, etc.)
+A, 162, STUDY_NAME, Character*12,           Study descriptor
+A, 174, PATIENT_ID, Character*16,           Patient identification descriptor
+A, 190, PATIENT_NAME, Character*32,         Patient name (free format ASCII)
+A, 222, PATIENT_SEX, Character*1,           E. type (SEX_MALE, _FEMALE, etc.)
+A, 223, PATIENT_AGE, Character*10,          Patient age (free format)
+A, 233, PATIENT_HEIGHT, Character*10,       Patient height (free format)
+A, 243, PATIENT_WEIGHT, Character*10,       Patient weight (free format)
+A, 253, PATIENT_DEXTERITY, Character*1,     E. type (DEXT_RT, _LF, _AMB, etc.)
+A, 254, PHYSICIAN_NAME, Character*32,       Physician name (free format)
+A, 286, OPERATOR_NAME, Character*32,        Operator name (free format)
+A, 318, STUDY_DESCRIPTION, Character*32,    Free format ASCII
+A, 350, ACQUISITION_TYPE, Integer*2,        E. type (ACQ_RECTTR, _DYEM, etc.)
+A, 352, BED_TYPE, Integer*2,                E. type (BED_CTI, BED_SIEMENS, etc.)
+A, 354, SEPTA_TYPE, Integer*2,              E. type (SEPTA_NONE, 3MM, etc.)
+A, 356, FACILITY_NAME, Character*20,        Free format ASCII
+A, 376, NUM_PLANES, Integer*2,              Number of planes of data collected
+A, 378, NUM_FRAMES, Integer*2,              Number of frames of data collected
+A, 380, NUM_GATES, Integer*2,               Number of gates of data collected
+A, 382, NUM_BED_POS, Integer*2,             Number of bed positions of data collected
+A, 384, INIT_BED_POSITION, Real*4,          Absolute bed location of bed position 0 (cm.)
+A, 388, BED_OFFSET(15), Real*4,             Offset from INIT_BED_POSITION (in cm.)
+A, 448, PLANE_SEPARATION, Real*4,           Distance between adjacent planes (in cm.)
+A, 452, LWR_SCTR_THRES, Integer*2,          Lowest threshold setting for scatter (in KeV)
+A, 454, LWR_TRUE_THRES, Integer*2,          Lower threshold setting for trues (in KeV)
+A, 456, UPR_TRUE_THRES, Integer*2,          Upper threshold setting for trues (in KeV)
+A, 458, COLLIMATOR, Real*4,                 Collimator position (if applicable--911's)
+ , 462, USER_PROCESS_CODE, Character*10,    Data processing code (defined by user)
+ , 472, %FILL(20), Integer*2,               User reserved space (40 bytes)
+
+
+########################################################################################################################
+Subheader for Matrix Scan Files ECAT6.3
+
+When Filled, Byte, Variable Name, Type      Comment
+ , 0, %FILL(63), Integer*2,                 User reserved space (126 bytes)
+ , 126, DATA_TYPE, Integer*2,               Enumerated file data type
+ , 128, %FILL(2), Integer*2,                Unused
+C, 132, DIMENSION_1, Integer*2,             Total views collected (y dimension)
+C, 134, DIMENSION_2, Integer*2,             Total elements collected (x dimension)
+C, 136, SMOOTHING, Integer*2,               0 = not smoothed, 1 = 9 x 9 smoothing
+ , 138, PROCESSING_CODE, Integer*2,         Designates processing applied to scan data
+ , 140, %FILL(3), Integer*2,                Unused
+C, 146, SAMPLE_DISTANCE, Real*4,            Actual Distance of view sample (in cm.)
+ , 150, %FILL(8), Integer*2,                Unused
+C, 166, ISOTOPE_HALFLIFE, Real*4,           Half-life of isotope (in sec.)
+C, 170, FRAME_DURATION_SEC, Integer*2,      Frame duration (in sec.)
+C, 172, GATE_DURATION, Integer*4,           Gating segment length (in msec.)
+C, 176, R_WAVE_OFFSET, Integer*4,           Time from start of first gate (in msec.)
+ , 180, %FILL(1), Integer*2,                Unused
+C, 182, SCALE_FACTOR, Real*4,               Always set to 1
+C, 186, %FILL(3), Integer*2,                Unused
+C, 192, SCAN_MIN, Integer*2,                Minimum value in sinogram
+ , 194, SCAN_MAX, Integer*2,                Maximum value in sinogram
+C, 196, Prompts, Integer*4,                 Total prompts collected in this frame/gate
+C, 200, DELAYED, Integer*4,                 Total delays collected in this frame/gate
+C, 204, MULTIPLES, Integer*4,               Total multiples collected in thes frame/gate
+C, 208, NET_TRUES, Integer*4,               Total net trues (prompts--randoms)
+ , 212, %FILL(52), Integer*2,               User reserved space (104 bytes)
+C, 316, COR_SINGLES(16), Real*4,            Total singles with loss correction factoring
+C, 380, UNCOR_SINGLES(16), Real*4,          Total singles without loss correction factoring
+C, 444, TOT_AVG_COR, Real*4,                Mean value of loss-corrected singles
+C, 448, TOTAL_AVG_UNCOR, Real*4,            Mean value of singles (not loss corrected)
+C, 452, TOTAL_COIN_RATE, Integer*4,         Measured coincidence rate (from IPCP)
+C, 456, FRAME_START_TIME, Integer*4,        Time offset from first frame time (in msec.)
+C, 460, FRAME_DURATION, Integer*4,          Total duration of current frame (in msec.)
+C, 464, LOSS_CORRECTION_FCTR, Real*4,       Loss correction factor applied to the sinogram
+ , 468, %FILL(22), Integer*2,               Unused (44 bytes)
+
+
+########################################################################################################################
+Main header for Matrix Image Files ECAT6.3
+
+When Filled, Byte, Variable Name, Type,     Comment
+ , 0, %FILL(63), Integer*2,                 User reserved space (126 bytes)
+B, 126, DATA_TYPE, Integer*2,               Enumerated type (DTYPE_BYTES, _I2, etc)
+B, 128, NUM_DIMENSIONS, Integer*2,          Number of dimensions
+ , 130, %FILL(1), Integer*2,                Unused
+B, 132, DIMENSION_1, Integer*2,             Dimension along x axis
+B, 134, DIMENSION_2, Integer*2,             Dimension along y axis
+ , 136, %FILL(12), Integer*2,               Unused
+B, 160, X_ORIGIN, Real*4,                   Offset in x axis for recon target (in cm.)
+B, 164, Y_ORIGIN, Real*4,                   Offset in y axis for recon target (in cm.)
+B, 168, RECON_SCALE, Real*4,                Reconstruction magnification factor (zoom)
+B, 172, QUANT_SCALE, Real*4,                Quantification scale factor ( in Quant_units)
+B, 176, IMAGE_MIN, Integer*2,               Image minimum pixel value
+B, 178, IMAGE_MAX, Integer*2,               Image maximum pixel value
+ , 180, %FILL(2), Integer*2,                Unused
+B, 184, PIXEL_SIZE, Real*4,                 Pixel size (in cm.)
+B, 188, SLICE_WIDTH, Real*4,                Axial slice thickness (in cm.)
+B, 192, FRAME_DURATION, Integer*4,          Total duration of current frame (in msec.)
+B, 196, FRAME_START_TIME, Integer*4,        Frame start time (offset from first frame)
+B, 200, SLICE_LOCATION, Integer*2,          Location offset from initial bed position (cm.)
+B, 202, RECON_START_HOUR, Integer*2,        Hour reconstruction began
+B, 204, RECON_START_MIN, Integer*2,         Minute reconstruction began
+B, 206, RECON_START_SEC, Integer*2,         Second reconstruction began
+B, 208, RECON_DURATION, Integer*4,          Duration of reconstruction (in msec.)
+ , 212, %FILL(12), Integer*2,               Unused (24 bytes)
+B, 236, FILTER_CODE, Integer*2,             Enumerated type (FILT_NONE, _RAMP, etc.)
+B, 238, SCAN_MATRIX_NUM, Integer*4,         File index to corresponding scan data
+B, 242, NORM_MATRIX_NUM, Integer*4,         File index to corresponding normal data
+B, 246, ATTEN_COR_MAT_NUM, Integer*4,       File index to attenuation correction data
+ , 250, %FILL(23), Integer*2,               Unused (46 bytes)
+B, 296, IMAGE_ROTATION, Real*4,             Angle image was rotated (in degrees)
+B, 300, PLANE_EFF_CORR_FCTR, Real*4,        Plane efficiency factor applied
+B, 304, DECAY_CORR_FCTR, Real*4,            Isotope deca compensation applied to data
+B, 308, LOSS_CORR_FCTR, Real*4,             Loss correction factor (dead time) applied
+ , 312, %FILL(32), Integer*2,               Unused (64 bytes)
+B, 376, PROCESSING_CODE, Integer*2,         Bit encoded (PROC_DECAY_MASK, etc.)
+ , 378, %FILL(1), Integer*2,                Unused
+B, 380, QUANT_UNITS, Integer*2,             E. type (UNIT_MCIML, _NONE, etc.)
+B, 382, RECON_START_DAY, Integer*2,         Day image was reconstructed
+B, 384, RECON_START_MONTH, Integer*2,       Month image was reconstructed
+B, 386, RECON_START_YEAR, Integer*2,        Year image was reconstructed.
+B, 388, ECAT_CALIBRATION_FCTR, Real*4,      ECAT calibration factor
+B, 392, WELL_COUNTER_CAL_FCTR, Real*4,      Well counter calibration factor
+B, 396, FILTER_PARAMS(6), Real*4,           Cutoff frequency, DC component, ramp slope
+B, 420, ANNOTATION, Character*40,           Free format ASCII
+ , 460, %FILL(26), Integer*2,               User reserved space (52 bytes)
 
 
 ECAT7
 ########################################################################################################################
-Main Header for Matrix Data Files
+Main Header for Matrix Data Files, ECAT7
 
 Byte, Variable, Name, Type,                 Comment
 0, MAGIC_NUMBER, Character*14,              UNIX file type identification number (NOT PART
@@ -191,7 +281,7 @@ Byte, Variable, Name, Type,                 Comment
 
 
 ########################################################################################################################
-Subheader for Matrix Attenuation Files
+Subheader for Matrix Attenuation Files, ECAT7
 
 Byte, Variable, Name, Type,                 Comment
 0, DATA_TYPE, Integer*2,                    Enumerated type (DTYPE_BYTES, _I2, _I4, _VAXR4, _SUNFL, _SUNIN)
@@ -228,7 +318,7 @@ Byte, Variable, Name, Type,                 Comment
 412, FILL(50), Integer*2,                   User Reserved space (100 bytes) Note: use highest bytes first
 
 ########################################################################################################################
-Subheader for Matrix Image Files
+Subheader for Matrix Image Files, ECAT7
 
 Byte, Variable, Name, Type,                 Comment
 0, DATA_TYPE, Integer*2,                    Enumerated type (0=Unkonwn Matrix Data Type, 1=Byte Data, 2=VAX_Ix2, 3=VAX_Ix4,
@@ -302,7 +392,7 @@ Byte, Variable, Name, Type,                 Comment
 414 FILL(48), Integer*2,                    User Reserved space (100 bytes) Note: Use highest bytes first
 
 ########################################################################################################################
-Subheader for Matrix Polar Map Files
+Subheader for Matrix Polar Map Files, ECAT7
 
 Byte, Variable Name, Type,                  Comment
 0, DATA_TYPE, Integer*2,                    Enumerated type (DTYPE_BYTES, _I2,_I4)
@@ -340,7 +430,7 @@ Byte, Variable Name, Type,                  Comment
 
 
 ########################################################################################################################
-Subheader for 3D Matrix Scan Files
+Subheader for 3D Matrix Scan Files, ECAT7
 
 Byte, Variable Name, Type,                  Comment
 0, DATA_TYPE, Integer*2,                    Enumerated type (ByteData, SunShortt)
@@ -382,7 +472,7 @@ Byte, Variable Name, Type,                  Comment
 512, UNCOR_SINGLES(128), Real*4,            Total uncorrected singles from each bucket
 
 ########################################################################################################################
-Subheader for 3D normalized Files
+Subheader for 3D normalized Files, ECAT7
 
 Byte, Variable Name, Type,                  Comment
 0, DATA_TYPE, Integer*2,                    Enumerated type (IeeeFloat)
@@ -406,7 +496,7 @@ Byte, Variable Name, Type,                  Comment
 412, FILL(50), Integer*2,                   User Reserved space (100 bytes) Note: Use highest bytes first
 
 ########################################################################################################################
-Subheader for Imported 6.5 Matrix Scan Files
+Subheader for Imported 6.5 Matrix Scan Files ECAT7
 
 Version 6.5 scan files that or imported into version 7.X cannot be reconstructed. The subheader is only 512 bytes,
 rather than 1024.
