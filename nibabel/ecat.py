@@ -129,7 +129,7 @@ C, 182, SCALE_FACTOR, Real*4,               Always set to 1
 C, 186, %FILL(3), Integer*2,                Unused
 C, 192, SCAN_MIN, Integer*2,                Minimum value in sinogram
  , 194, SCAN_MAX, Integer*2,                Maximum value in sinogram
-C, 196, Prompts, Integer*4,                 Total prompts collected in this frame/gate
+C, 196, PROMPTS, Integer*4,                 Total prompts collected in this frame/gate
 C, 200, DELAYED, Integer*4,                 Total delays collected in this frame/gate
 C, 204, MULTIPLES, Integer*4,               Total multiples collected in thes frame/gate
 C, 208, NET_TRUES, Integer*4,               Total net trues (prompts--randoms)
@@ -275,7 +275,7 @@ Byte, Variable, Name, Type,                 Comment
                                             since base time)
 458, DOSAGE, Real*4,                        Radiopharmaceutical dosage (in bequerels/cc) at time of injection
 462, WELL_COUNTER_CORR_FACTOR, Real*4, TBD
-466, DATA_UNITS, Character*3.2
+466, DATA_UNITS, Character*32
 498, SEPTA_STATE, Integer*2,                Septa position during scan (0=septa extended, 1=septa retracted)
 500, FILL(6), Integer*2,                    CTI Reserved space (12 bytes)
 
@@ -356,7 +356,7 @@ Byte, Variable, Name, Type,                 Comment
 88, GATE_DURATION, Integer*4,               gate duration (in msec)
 92, R_WAVE_OFFSET, Integer*4,               r wave offset (for phase sliced studies, average, in msec)
 96, NUM_ACCEPTED_BEATS, Integer*4,          number of accepted beats for this gate
-100, FILTER_CUTOFF_FREQUENCY,               real*4, cutoff frequency
+100, FILTER_CUTOFF_FREQUENCY, real*4,       cutoff frequency
 104, FILTER_RESOLUTION, Real*4,             do not use
 108, FILTER_RAMP_SLOPE, Real*4,             do not use
 112, FILTER_ORDER, Integer*2,               do not use
@@ -485,7 +485,7 @@ Byte, Variable Name, Type,                  Comment
 14, LLD, Integer*2,                         Lower energy limit
 16, SCATTER_ENERGY, Integer*2,              Scatter energy threshold
 18, NORM_QUALITY_FACTOR, Real*4,            Used by Daily Check to determine the quality of the scanner
-22, NORM_QUALITY_FACTOR_CODE,               Enumerated Type (TBD)
+22, NORM_QUALITY_FACTOR_CODE, Integer*2     Enumerated Type (TBD)
 24, RING_DTCOR1(32), Real*4,                First “per ring” dead time correction coefficient
 152, RING_DTCOR2(32), Real*4,               Second “per ring” dead time correction coefficient
 280, CRYSTAL_DTCOR(8), Real*4,              Dead time correction factors for transaxial crystals
@@ -518,7 +518,7 @@ Byte, Variable Name, Type,                  Comment
 42, GATE_DURATION, Integer*4,               Gating segment length (msec, Average time if phased gates are used)
 46, R_WAVE_OFFSET, Integer*4,               Time from start of first gate (Average, in msec.)
 50, NUM_ACCEPTED_BEATS, Integer*4,          Number of accepted beats for this gate
-50, SCALE_FACTOR, Real*4,                   If data type=integer, use this factor, convert to float values
+54, SCALE_FACTOR, Real*4,                   If data type=integer, use this factor, convert to float values
 58, SCAN_MIN, Integer*2,                    Minimum value in sinogram if data is in integer form
 60, SCAN_MAX, Integer*2,                    Maximum value in sinogram if data is in integer form
 62, PROMPTS, Integer*4,                     Total prompts collected in this frame/gate
@@ -529,7 +529,7 @@ Byte, Variable Name, Type,                  Comment
 142, UNCOR_SINGLES(16), Real*4,             Total singles without loss correction factoring
 206, TOT_AVG_COR, Real*4,                   Mean value of loss-corrected singles
 210, TOT_AVG_UNCOR, Real*4,                 Mean value of singles (not loss corrected)
-214, TOTAL_COIN_RAIN, Integer*4,            Measured coincidence rate (from IPCP)
+214, TOTAL_COIN_RATE, Integer*4,            Measured coincidence rate (from IPCP)
 218, FRAME_START_TIME, Integer*4,           Time offset from first frame time (in msec.)
 222, FRAME_DURATION, Integer*4,             Total duration of current frame (in msec.)
 226, DEADTIME_CORRECTION_FACTOR, Real*4,    Dead-time correction factor applied to the sinogram
